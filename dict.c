@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <unistd.h>
 #define PRINT_STR(x) printf(#x" : %s\n", x)
 typedef struct word_struct{
 	char eng[16]; //영어단어 15자 + '\0'
@@ -13,30 +15,43 @@ FILE *read_file(void);
 void choose_dic(word_struct *word);
 void make_word_array(word_struct **word_array, word_struct *word);
 int compare_word(const void *a, const void *b);
+void hang_man(void);
+void manage_init(void);
+void manage_add(void);
 
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
 int main(void){
-	word_struct *word = (word_struct *)malloc(sizeof(word_struct)); //첫 구조체word
-	choose_dic(word); //파일선택 후 자기참조구조체 생성
+	system("clear");
+	char num = 0;
+	while(num != 5){
+		fprintf(stderr, ">>영어 단어 암기 프로그램<<\n");		//메뉴 출력
+		fprintf(stderr, "1. 영어 단어 맞추기\t2. 플래쉬 카드\n");
+		fprintf(stderr, "3. 행맨(hangman)\t 4. 단어장 관리\n");
+		fprintf(stderr, "5. 프로그램 종료\n");
+		scanf("%hhd", &num);
+		while(getchar() != '\n'); //입력버퍼 비우기
 
-	word_struct *word_array[cnt];
-	make_word_array(word_array, word); //포인터배열 생성
-	qsort(word_array, cnt, sizeof(word_struct *), compare_word);
-	#ifdef DEBUG
-	/*
-	특정 구조체에 자기 참조 구조체로 이어진 모든 구조체를 출력하는 코드
-	*/
-		for(int i = 0; i<cnt; i++){
-			printf("%d. %s %s\n", i, word_array[i] -> eng, word_array[i] -> kor);
-		}
-	#endif
-	return 0;
+		if (num == 4)
+			manage_init();	//단어장관리
+		else if (num == 3)
+			hang_man();	//행맨
+		else if (num == 2)
+			;	//플래시카드
+		else if (num == 1)
+			;	//단어맞추기
+		else if (num == 5)
+			;
+		else
+			fprintf(stderr, "잘못된 입력\n");	//1~5 사이의 입력이 아닐때 오류메세지 출력
+		putchar('\n');
+		//system("clear");
+	}
+
 }
 
 //qsort를 위한 compare함수
 int compare_word(const void *a, const void *b){
-	printf("%d\n", (strcmp((*(word_struct **)a) -> eng, (*(word_struct **)b) -> eng)));
 	return strcmp((*(word_struct **)a) -> eng, (*(word_struct **)b) -> eng);
 }
 
@@ -71,18 +86,12 @@ int make_struct(FILE *dict, word_struct *word){
 	int cnt_tmp = 0; //자기 참조 구조체의 구조체갯수
 	word_struct *p_word = word; //임시 포인터변수p_word에 word의 주소대입
 	//파일이 끝날 때까지 while 순환
-	while(fscanf(dict, "%s ", p_word -> eng) != EOF){ //영어단어 저장
-		char a;
-		int i = 0;
-		//한글은 띄어쓰기를 포함하기 위해 getc로 개행문자전까지 입력
-		while((a = getc(dict)) != '\n'){
-			(p_word -> kor)[i] = a;
-			i++;
-		}
+	while(fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor) != EOF){	//영어단어 저장			(변경)getc로 받아오기에서 %[^\n]로
+		getc(dict);
 		#ifdef DEBUG
 			PRINT_STR(p_word -> eng);
 			PRINT_STR(p_word -> kor);
-			printf("한글strlen : %lu\n", strlen(p_word->kor));
+			fprintf(stderr, "한글strlen %lu\n", strlen(p_word -> kor));
 		#endif
 		cnt_tmp++;
 		p_word -> next = (word_struct *)malloc(sizeof(word_struct)); //p_word의 next에 다음 구조체의 주소를 동적할당
@@ -99,6 +108,7 @@ FILE *read_file(void){
 	FILE *f_list = fopen("dic.list", "r"); //dic.list 오픈
 	printf("단어장 번호를 입력해주세요 : ");
 	scanf("%s", target); //target에 사용자가 원하는 숫자 입력
+	while(getchar() != '\n');								//(추가) 개행문자 혹은 나머지 입력버퍼 비우기
 	strcat(target, ".dic"); //target에 확장자 .dic 입력
 	while(fscanf(f_list, "%s", compare) != EOF){ //target이 dic.list에 있는지 한줄씩 확인
 		if(!strcmp(target, compare)){ //strcmp가 0을 반환하면(같은 이름의 파일이 있으면)
@@ -111,3 +121,153 @@ FILE *read_file(void){
 	printf("해당번호의 단어장은 없습니다.\n");
 	return NULL;
 }
+
+void freeall(word_struct *head){	//연결리스트의 동적할당을 해제하는 함수
+	while(head != NULL){
+		word_struct *tmp = head -> next;
+		free(head);
+		head = tmp;
+	}
+}
+
+
+void print_hangman(char* underbar, char* hanged_man, word_struct* word){	//행맨의 화면을 출력하는 함수
+	int tmp = 0;
+	printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
+	printf("(힌트) : %s\n\n\n", word -> kor);
+	for(tmp = 0; tmp < 20; tmp++)
+		putchar('-');
+	printf("+\n");
+	printf("%20c\n", hanged_man[0]);
+	printf("%19c%c%c\n", hanged_man[2], hanged_man[1], hanged_man[3]);
+	printf("%19c%c\n\n\n", hanged_man[4], hanged_man[5]);
+
+	printf("%s\n", underbar);
+}
+
+
+void manh(int lose, char* hanged_man){		//매달려있는 행맨의 진행도를 저장하는 함수
+	switch(lose){
+		case 6 :
+			hanged_man[5] = '\\';
+			break;
+		case 5 :
+			hanged_man[4] = '/';
+			break;
+		case 4 :
+			hanged_man[3] = '\\';
+			break;
+		case 3 :
+			hanged_man[2] = '/';
+			break;
+		case 2 :
+			hanged_man[1] = '|';
+			break;
+		case 1 : 
+			hanged_man[0] = 'O';
+	}
+}
+
+
+void hang_man(void){		//행맨
+	int random_hang, dump = 0, progress = 0, tries = 1, lose = 0,  correct = 0;	//lose는 몇번 실패했는지, correct는 단어를 맞췄는지 판정하는데 사용
+	char input_char, answer[16], hanged_man[6] = {' ', ' ', ' ', ' ', ' ', ' '};	//answer는 행맨 밑 언더바에, hanged_man은 행맨을 그리는데 사용
+
+	word_struct *head = (word_struct*)malloc(sizeof(word_struct));	//연결리스트를 받아올 구조체 선언
+	choose_dic(head); //연결리스트 불러옴
+	srand(time(NULL));
+	random_hang = rand() % (cnt - 1); //난수 생성
+
+	word_struct *link = head -> next;	//사용할 구조체 가져오기
+	while(random_hang){
+		link = link -> next;
+		random_hang--;
+	}
+	
+	for(dump = 0; dump < strlen(link->eng); dump++)		//단어들이 나오는  언더바 초기화
+		answer[dump] = '_';
+	answer[dump + 1] = '\0';
+	
+	while(progress != strlen(link -> eng)){
+		system("clear");
+		manh(lose, hanged_man);
+		print_hangman(answer, hanged_man, link);
+		if(lose == 6){					//행맨이 전부 그려질 경우 진행도와 상관없이 패배
+			printf("\n\nGAME OVER\n3초 후에 메인 메뉴로 돌아갑니다.\n");
+			freeall(head);	//동적할당 해제
+			sleep(3);
+			return;
+		}
+		printf("\n%d번째 시도 : ", tries);
+		scanf("%c", &input_char);
+		while(getchar() != '\n');	//입력버퍼 비우기
+		for(dump = 0; dump < strlen(link -> eng); dump++)	//받아온 단어를 비교
+			if((link -> eng)[dump] == input_char){
+			       progress += 1;		//진행도를 증가시킴
+			       answer[dump] = input_char;
+			       (link -> eng)[dump] = '0';	//같다면 본래 배열에'0'을 넣어 다시 사용되지 않게함
+			       correct = 1;
+			}
+		correct ? 0 : (lose += 1);	//같은게 있었다면 lose는 증가하지 않음
+		correct = 0;
+		tries++;
+
+	}
+	system("clear");
+	print_hangman(answer, hanged_man, link);
+	freeall(head);	//동적할당 해제
+	printf("\n\nCongratulation\n 3초 후에 메인 메뉴로 돌아갑니다.\n");
+	sleep(3);
+}
+
+void manage_init(void){
+	//word_struct *word = (word_struct *)malloc(sizeof(word_struct)); //첫 구조체word
+	//choose_dic(word); //파일선택 후 자기참조구조체 생성
+ 	//word_struct *word_array[cnt];
+	//make_word_array(word_array, word); //포인터배열 생성
+
+	system("clear");
+	char num = 0;
+	while(num != 5){
+		fprintf(stderr, ">>영어 단어 암기 프로그램 : 단어장 관리<<\n");		//메뉴 출력
+		fprintf(stderr, "1. 새 파일 추가하기\t2. 새 단어 추가하기\n");
+		fprintf(stderr, "3. 단어장 보기\t 4. 단어 파일 목록보기\n");
+		fprintf(stderr, "5. 단어장 관리 종료\n");
+		printf("\n\n번호를 입력하세요 : ");
+		scanf("%hhd", &num);
+		while(getchar() != '\n'); //입력버퍼 비우기
+
+		if (num == 1)
+			manage_add();	//단어장관리
+		else if (num == 2)
+			;
+		else if (num == 3)
+			;	//플래시카드
+		else if (num == 4)
+			;	//단어맞추기
+		else if (num == 5)
+			;
+		else
+			fprintf(stderr, "잘못된 입력\n");	//1~5 사이의 입력이 아닐때 오류메세지 출력
+		putchar('\n');
+	}
+}
+
+void manage_add(void){
+	FILE *f = fopen("dic.list", "r");
+	if(f == NULL){
+		fprintf(stderr, "dic.list를 찾을 수 없습니다.\n");
+		return;
+	}
+	fseek(f, -2, SEEK_END); //dic.list의 가장 마지막 줄로 이동
+	char tmp_c, last_file[20] = ""; //마지막 파일명을 저장할 변수
+	int i = 0;
+	while((tmp_c = getc(f)) != '\n'){
+		strcat(last_file, &tmp_c);
+		fseek(f, -2, SEEK_CUR);
+		PRINT_STR(last_file);
+	}
+	printf("%s\n", last_file);
+	//while(fscanf
+}
+
