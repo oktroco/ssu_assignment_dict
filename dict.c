@@ -18,6 +18,7 @@ int compare_word(const void *a, const void *b);
 void hang_man(void);
 void manage_init(void);
 void manage_add(void);
+void input_words(FILE *f);
 
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
@@ -259,15 +260,39 @@ void manage_add(void){
 		fprintf(stderr, "dic.list를 찾을 수 없습니다.\n");
 		return;
 	}
-	fseek(f, -2, SEEK_END); //dic.list의 가장 마지막 줄로 이동
-	char tmp_c, last_file[20] = ""; //마지막 파일명을 저장할 변수
-	int i = 0;
-	while((tmp_c = getc(f)) != '\n'){
-		strcat(last_file, &tmp_c);
-		fseek(f, -2, SEEK_CUR);
-		PRINT_STR(last_file);
+	char last_name[20], tmp_name[20];
+	int last_file_num = 1;
+	while((fscanf(f, "%s\n", tmp_name)) != EOF)
+		strcpy(last_name, tmp_name);
+	sscanf(last_name, "%d", &last_file_num);
+	sprintf(last_name, "%d", last_file_num + 1);
+	strcat(last_name, ".dic");
+	FILE *new_f = fopen(last_name, "w");
+	input_words(new_f);
+	fclose(new_f);
+	fprintf(f, "%s\n", last_name);
+	fclose(f);
+	system("clear");
+	printf("새 단어장 %s가 추가되었습니다.\n\n", last_name);
+}
+
+void input_words(FILE *f){
+	char eng[16], kor[93];
+	int word_cnt = 0;
+	while(word_cnt < 20){
+		printf("최대 20단어까지 입력가능하며, 단어입력을 끝내려면 .add를 입력해주세요");
+		printf("남은 단어 입력 수 : %d\n", 20 - word_cnt);
+		printf("영어 단어를 입력하세요(최대 15자) : \n");
+		scanf("%s", eng);
+		while(getchar() != '\n');								//(추가) 개행문자 혹은 나머지 입력버퍼 비우기
+		if(!strcmp(eng, ".add"))
+			break;
+		printf("한글 뜻을 입력하세요(뜻은 최대 3개, 띄어쓰기로 구분, 모든 한글 뜻 합쳐서 30자까지 : \n");
+		scanf("%[^\n]", kor);
+		while(getchar() != '\n');								//(추가) 개행문자 혹은 나머지 입력버퍼 비우기
+		fprintf(f, "%s %s\n", eng, kor);
+		printf("%s : %s \n추가완료\n\n", eng, kor);
+		word_cnt++;
 	}
-	printf("%s\n", last_file);
-	//while(fscanf
 }
 
