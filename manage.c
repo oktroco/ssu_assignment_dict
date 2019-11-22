@@ -1,4 +1,3 @@
-#include "header.h"
 void manage_init(void){
 	//word_struct *word = (word_struct *)malloc(sizeof(word_struct)); //첫 구조체word
 	//choose_dic(word); //파일선택 후 자기참조구조체 생성
@@ -17,9 +16,9 @@ void manage_init(void){
 		while(getchar() != '\n'); //입력버퍼 비우기
 
 		if (num == 1)
-			manage_add();	//단어장관리
+			manage_add_dic();	//단어장관리
 		else if (num == 2)
-			;
+			manage_add_words();
 		else if (num == 3)
 			;	//플래시카드
 		else if (num == 4)
@@ -32,7 +31,7 @@ void manage_init(void){
 	}
 }
 
-void manage_add(void){
+void manage_add_dic(void){
 	FILE *f = fopen("dic.list", "r");
 	if(f == NULL){
 		fprintf(stderr, "dic.list를 찾을 수 없습니다.\n");
@@ -46,15 +45,25 @@ void manage_add(void){
 	sprintf(last_name, "%d", last_file_num + 1);
 	strcat(last_name, ".dic");
 	FILE *new_f = fopen(last_name, "w");
-	PRINT_STR(last_name);
 	input_words(new_f);
 	fclose(new_f);
 	fclose(f);
 	FILE *f_append = fopen("dic.list", "a");
 	fprintf(f_append, "%s\n", last_name);
 	fclose(f_append);
+	system("clear");
 	printf("새 단어장 %s가 추가되었습니다.\n\n", last_name);
 }
+
+void manage_add_words(void){
+	FILE *dict;
+	while((dict = read_file("a")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
+	input_words(dict);
+	fclose(dict);
+	system("clear");
+	printf("단어장에 단어가 추가되었습니다.\n\n");
+}
+	
 
 void input_words(FILE *f){
 	char eng[16], kor[93];

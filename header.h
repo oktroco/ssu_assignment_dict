@@ -11,12 +11,13 @@ typedef struct word_struct{
 	struct word_struct *next; //자기 참조를 위한 포인터변수
 } word_struct;
 int make_struct(FILE *dict, word_struct *word);
-FILE *read_file(void);
+FILE *read_file(char *type);
 void choose_dic(word_struct *word);
 void make_word_array(word_struct **word_array, word_struct *word);
 int compare_word(const void *a, const void *b);
 void hang_man(void);
 void manage_init(void);
-void manage_add(void);
+void manage_add_dic(void);
+void manage_add_words(void);
 void input_words(FILE *f);
 #endif

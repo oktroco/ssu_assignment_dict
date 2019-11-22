@@ -1,5 +1,5 @@
 #include "header.h"
-
+#include "manage.c"
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
 int main(void){
@@ -42,7 +42,7 @@ int compare_word(const void *a, const void *b){
 */
 void choose_dic(word_struct *word){
 	FILE *dict;
-	while((dict = read_file()) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
+	while((dict = read_file("r")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
 	cnt = make_struct(dict, word); //dict와 word를 이용하여 자기 참조 구조체 완성
 	fclose(dict);
 }
@@ -83,7 +83,7 @@ int make_struct(FILE *dict, word_struct *word){
 }
 
 //x.dic이 dic.list이 존재하는지 검사 후 x.dic의 주소를 반환을 하는 함수
-FILE *read_file(void){
+FILE *read_file(char *type){
 	char target[10]; //사용자가 원하는 파일명문자열
 	char compare[10]; //존재확인을 위한 비교문자열
 	FILE *f_list = fopen("dic.list", "r"); //dic.list 오픈
@@ -94,7 +94,8 @@ FILE *read_file(void){
 	while(fscanf(f_list, "%s", compare) != EOF){ //target이 dic.list에 있는지 한줄씩 확인
 		if(!strcmp(target, compare)){ //strcmp가 0을 반환하면(같은 이름의 파일이 있으면)
 			fclose(f_list); //dic.list 닫기
-			return fopen(target, "r"); //x.dic파일 주소 반환
+			printf("단어장 %s를 선택했습니다.\n", target);
+			return fopen(target, type); //x.dic파일 주소 반환
 		}
 	}
 	//target이 dic.list에 없을 경우 NULL반환
