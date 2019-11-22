@@ -16,13 +16,13 @@ void manage_init(void){
 		while(getchar() != '\n'); //입력버퍼 비우기
 
 		if (num == 1)
-			manage_add_dic();	//단어장관리
+			manage_add_dic();	//새 파일 추가
 		else if (num == 2)
-			manage_add_words();
+			manage_add_words(); //새 단어 추가
 		else if (num == 3)
-			;	//플래시카드
+			view_file_words();	//단어장 보기
 		else if (num == 4)
-			;	//단어맞추기
+			view_dic_list();	//단어맞추기
 		else if (num == 5)
 			;
 		else
@@ -60,8 +60,10 @@ void manage_add_words(void){
 	while((dict = read_file("a")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
 	input_words(dict);
 	fclose(dict);
-	system("clear");
 	printf("단어장에 단어가 추가되었습니다.\n\n");
+	printf("넘어가려면 아무키나 누르세요.");
+	getchar();
+	system("clear");
 }
 	
 
@@ -83,4 +85,38 @@ void input_words(FILE *f){
 		printf("%s : %s \n추가완료\n\n", eng, kor);
 		word_cnt++;
 	}
+}
+
+void view_file_words(void){
+	FILE *dict;
+	while((dict = read_file("r")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
+	char tmp_word[124];
+	printf("-------단어장-------\n");
+	while(fscanf(dict, "%[^\n]\n", tmp_word) != EOF)
+		printf("%s\n", tmp_word);
+	fclose(dict);
+	printf("넘어가려면 아무키나 누르세요.");
+	getchar();
+	system("clear");
+}
+
+void view_dic_list(void){
+	FILE *dic_list = fopen("dic.list", "r");
+	char tmp_dic[20];
+	printf("-------단어장목록-------\n");
+	while(fscanf(dic_list, "%[^\n]\n", tmp_dic) != EOF){
+		static short dic_cnt = 0;
+		if(dic_cnt < 5){
+			printf("%9s", tmp_dic);
+			dic_cnt++;
+		}
+		else{
+			printf("\n%9s", tmp_dic);
+			dic_cnt = 0;
+		}
+	}
+	fclose(dic_list);
+	printf("\n\n넘어가려면 아무키나 누르세요.");
+	getchar();
+	system("clear");
 }

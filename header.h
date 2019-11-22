@@ -20,4 +20,6 @@ void manage_init(void);
 void manage_add_dic(void);
 void manage_add_words(void);
 void input_words(FILE *f);
+void view_file_words(void);
+void view_dic_list(void);
 #endif
