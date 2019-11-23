@@ -1,5 +1,6 @@
 #include "header.h"
 #include "manage.c"
+#include "hangman.c"
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
 int main(void){
@@ -67,7 +68,8 @@ int make_struct(FILE *dict, word_struct *word){
 	int cnt_tmp = 0; //자기 참조 구조체의 구조체갯수
 	word_struct *p_word = word; //임시 포인터변수p_word에 word의 주소대입
 	//파일이 끝날 때까지 while 순환
-	while(fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor) != EOF){	//영어단어 저장			(변경)getc로 받아오기에서 %[^\n]로
+	int check = fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor);	//check 변수에 받아와서 더 읽어올게 있는지 확인
+	while(check != EOF){	//영어단어 저장
 		getc(dict);
 		#ifdef DEBUG
 			PRINT_STR(p_word -> eng);
@@ -77,6 +79,7 @@ int make_struct(FILE *dict, word_struct *word){
 		cnt_tmp++;
 		p_word -> next = (word_struct *)malloc(sizeof(word_struct)); //p_word의 next에 다음 구조체의 주소를 동적할당
 		p_word = p_word -> next; //다음 구조체에 정보입력을 하기 위해 p_word에 다음 구조체 주소 대입
+		check = fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor);
 	}
 	p_word -> next = NULL; //마지막 구조체에는 이어지는 구조체가 없으므로 next에 NULL포인터 대입
 	return cnt_tmp;
@@ -104,102 +107,8 @@ FILE *read_file(char *type){
 	return NULL;
 }
 
-void freeall(word_struct *head){	//연결리스트의 동적할당을 해제하는 함수
-	while(head != NULL){
-		word_struct *tmp = head -> next;
-		free(head);
-		head = tmp;
-	}
+void freeall(word_struct *curr){	//연결리스트의 동적할당을 해제하는 함수
+	if(curr -> next != NULL)
+		freeall(curr -> next);
+	free(curr);
 }
-
-
-void print_hangman(char* underbar, char* hanged_man, word_struct* word){	//행맨의 화면을 출력하는 함수
-	int tmp = 0;
-	printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
-	printf("(힌트) : %s\n\n\n", word -> kor);
-	for(tmp = 0; tmp < 20; tmp++)
-		putchar('-');
-	printf("+\n");
-	printf("%20c\n", hanged_man[0]);
-	printf("%19c%c%c\n", hanged_man[2], hanged_man[1], hanged_man[3]);
-	printf("%19c%c\n\n\n", hanged_man[4], hanged_man[5]);
-
-	printf("%s\n", underbar);
-}
-
-
-void manh(int lose, char* hanged_man){		//매달려있는 행맨의 진행도를 저장하는 함수
-	switch(lose){
-		case 6 :
-			hanged_man[5] = '\\';
-			break;
-		case 5 :
-			hanged_man[4] = '/';
-			break;
-		case 4 :
-			hanged_man[3] = '\\';
-			break;
-		case 3 :
-			hanged_man[2] = '/';
-			break;
-		case 2 :
-			hanged_man[1] = '|';
-			break;
-		case 1 : 
-			hanged_man[0] = 'O';
-	}
-}
-
-
-void hang_man(void){		//행맨
-	int random_hang, dump = 0, progress = 0, tries = 1, lose = 0,  correct = 0;	//lose는 몇번 실패했는지, correct는 단어를 맞췄는지 판정하는데 사용
-	char input_char, answer[16], hanged_man[6] = {' ', ' ', ' ', ' ', ' ', ' '};	//answer는 행맨 밑 언더바에, hanged_man은 행맨을 그리는데 사용
-
-	word_struct *head = (word_struct*)malloc(sizeof(word_struct));	//연결리스트를 받아올 구조체 선언
-	choose_dic(head); //연결리스트 불러옴
-	srand(time(NULL));
-	random_hang = rand() % (cnt - 1); //난수 생성
-
-	word_struct *link = head -> next;	//사용할 구조체 가져오기
-	while(random_hang){
-		link = link -> next;
-		random_hang--;
-	}
-	
-	for(dump = 0; dump < strlen(link->eng); dump++)		//단어들이 나오는  언더바 초기화
-		answer[dump] = '_';
-	answer[dump + 1] = '\0';
-	
-	while(progress != strlen(link -> eng)){
-		system("clear");
-		manh(lose, hanged_man);
-		print_hangman(answer, hanged_man, link);
-		if(lose == 6){					//행맨이 전부 그려질 경우 진행도와 상관없이 패배
-			printf("\n\nGAME OVER\n3초 후에 메인 메뉴로 돌아갑니다.\n");
-			freeall(head);	//동적할당 해제
-			sleep(3);
-			return;
-		}
-		printf("\n%d번째 시도 : ", tries);
-		scanf("%c", &input_char);
-		while(getchar() != '\n');	//입력버퍼 비우기
-		for(dump = 0; dump < strlen(link -> eng); dump++)	//받아온 단어를 비교
-			if((link -> eng)[dump] == input_char){
-			       progress += 1;		//진행도를 증가시킴
-			       answer[dump] = input_char;
-			       (link -> eng)[dump] = '0';	//같다면 본래 배열에'0'을 넣어 다시 사용되지 않게함
-			       correct = 1;
-			}
-		correct ? 0 : (lose += 1);	//같은게 있었다면 lose는 증가하지 않음
-		correct = 0;
-		tries++;
-
-	}
-	system("clear");
-	print_hangman(answer, hanged_man, link);
-	freeall(head);	//동적할당 해제
-	printf("\n\nCongratulation\n 3초 후에 메인 메뉴로 돌아갑니다.\n");
-	sleep(3);
-}
-
-
