@@ -23,11 +23,10 @@ int main(void){
 		else if (num == 1)
 			;	//단어맞추기
 		else if (num == 5)
-			;
+			;  //종료
 		else
 			fprintf(stderr, "잘못된 입력\n");	//1~5 사이의 입력이 아닐때 오류메세지 출력
 		putchar('\n');
-		//system("clear");
 	}
 
 }
@@ -66,22 +65,16 @@ dic에서 자기 참조 구조체를 생성하는 함수
 */
 int make_struct(FILE *dict, word_struct *word){
 	int cnt_tmp = 0; //자기 참조 구조체의 구조체갯수
-	word_struct *p_word = word; //임시 포인터변수p_word에 word의 주소대입
+	word_struct *tmp_word, *p_word = word; //임시 포인터변수p_word에 word의 주소대입
 	//파일이 끝날 때까지 while 순환
-	int check = fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor);	//check 변수에 받아와서 더 읽어올게 있는지 확인
-	while(check != EOF){	//영어단어 저장
-		getc(dict);
-		#ifdef DEBUG
-			PRINT_STR(p_word -> eng);
-			PRINT_STR(p_word -> kor);
-			fprintf(stderr, "한글strlen %lu\n", strlen(p_word -> kor));
-		#endif
+	while(fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor) != EOF){	//영어단어 저장
+		//getc(dict);
 		cnt_tmp++;
 		p_word -> next = (word_struct *)malloc(sizeof(word_struct)); //p_word의 next에 다음 구조체의 주소를 동적할당
+		tmp_word = p_word; //임시 변수에 p_word 임시보관(마지막의 next에 NULL을 넣기 위함)
 		p_word = p_word -> next; //다음 구조체에 정보입력을 하기 위해 p_word에 다음 구조체 주소 대입
-		check = fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor);
 	}
-	p_word -> next = NULL; //마지막 구조체에는 이어지는 구조체가 없으므로 next에 NULL포인터 대입
+	tmp_word -> next = NULL; //마지막 구조체에는 이어지는 구조체가 없으므로 next에 NULL포인터 대입
 	return cnt_tmp;
 }
 
@@ -107,7 +100,8 @@ FILE *read_file(char *type){
 	return NULL;
 }
 
-void freeall(word_struct *curr){	//연결리스트의 동적할당을 해제하는 함수
+//연결리스트의 동적할당을 해제하는 함수
+void freeall(word_struct *curr){
 	if(curr -> next != NULL)
 		freeall(curr -> next);
 	free(curr);

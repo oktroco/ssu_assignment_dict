@@ -1,3 +1,4 @@
+//단어장 관리 메뉴 시작
 void manage_init(void){
 	system("clear");
 	char num = 0;
