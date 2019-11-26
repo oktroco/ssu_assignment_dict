@@ -9,7 +9,7 @@ int main(void){
 	while(num != 5){
 		fprintf(stderr, ">>영어 단어 암기 프로그램<<\n");		//메뉴 출력
 		fprintf(stderr, "1. 영어 단어 맞추기\t2. 플래쉬 카드\n");
-		fprintf(stderr, "3. 행맨(hangman)\t 4. 단어장 관리\n");
+		fprintf(stderr, "3. 행맨(hangman)\t4. 단어장 관리\n");
 		fprintf(stderr, "5. 프로그램 종료\n");
 		scanf("%hhd", &num);
 		while(getchar() != '\n'); //입력버퍼 비우기
