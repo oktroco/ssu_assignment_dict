@@ -20,6 +20,7 @@ void hang_man(void);
 void manage_init(void);
 void manage_add(void);
 void input_words(FILE *f);
+void flasch(void);
 
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
@@ -39,7 +40,7 @@ int main(void){
 		else if (num == 3)
 			hang_man();	//행맨
 		else if (num == 2)
-			;	//플래시카드
+			flasch();	//플래시카드
 		else if (num == 1)
 			;	//단어맞추기
 		else if (num == 5)
@@ -74,7 +75,8 @@ void choose_dic(word_struct *word){
 */
 void make_word_array(word_struct **word_array, word_struct *word){
 	word_struct *word_tmp = word;
-	for(int i = 0; i < cnt; i++){
+	int i;
+	for(i = 0; i < cnt; i++){
 		word_array[i] = word_tmp;
 		word_tmp = word_tmp -> next;
 	}
@@ -296,4 +298,23 @@ void input_words(FILE *f){
 		word_cnt++;
 	}
 }
-
+void flasch(void){
+	int time,how,i;
+	word_struct *word=(word_struct*)malloc(sizeof(word_struct));
+	printf("속도(초) : ");
+	scanf("%d", &time);
+	choose_dic(word);
+	word_struct *word_arry[cnt];
+	printf("출력방식(알파벳 순서대로 : 1, 무작위 : 2)");
+	scanf("%d",&how);
+	if(how==1){
+		qsort(word_arry,cnt,sizeof(word_struct*),compare_word);
+	}
+	time*=1000;
+	for(i=0;i<cnt;i++){
+		printf("%s",word_arry[i]->eng);
+		sleep(time);
+		printf("%s",word_arry[i]->kor);
+		sleep(time);
+	}
+}
