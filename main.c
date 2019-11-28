@@ -1,12 +1,10 @@
 #include "header.h"
-#include "manage.c"
-#include "hangman.c"
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
 int main(void){
-	system("clear");
 	char num = 0;
 	while(num != 5){
+		system("clear");
 		fprintf(stderr, ">>영어 단어 암기 프로그램<<\n");		//메뉴 출력
 		fprintf(stderr, "1. 영어 단어 맞추기\t2. 플래쉬 카드\n");
 		fprintf(stderr, "3. 행맨(hangman)\t4. 단어장 관리\n");
@@ -21,7 +19,7 @@ int main(void){
 		else if (num == 2)
 			;	//플래시카드
 		else if (num == 1)
-			;	//단어맞추기
+			match_eng();	//단어맞추기
 		else if (num == 5)
 			;  //종료
 		else

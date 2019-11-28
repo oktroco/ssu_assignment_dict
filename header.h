@@ -24,4 +24,8 @@ void view_file_words(void);
 void view_dic_list(void);
 void freeall(word_struct*);
 void flasch(void);
+void match_eng(void);
+#include "manage.c"
+#include "hangman.c"
+#include "matcheng.c"
 #endif

@@ -19,9 +19,10 @@ void manage_init(void){
 			view_file_words();	//단어장 보기
 		else if (num == 4)
 			view_dic_list();	//단어맞추기
+		else if (num == 5)
+			return;
 		else
 			fprintf(stderr, "잘못된 입력\n");	//1~5 사이의 입력이 아닐때 오류메세지 출력
-		putchar('\n');
 	}
 }
 
