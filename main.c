@@ -17,7 +17,7 @@ int main(void){
 		else if (num == 3)
 			hang_man();	//행맨
 		else if (num == 2)
-			;	//플래시카드
+			flasch();	//플래시카드
 		else if (num == 1)
 			match_eng();	//단어맞추기
 		else if (num == 5)
@@ -51,7 +51,8 @@ void choose_dic(word_struct *word){
 */
 void make_word_array(word_struct **word_array, word_struct *word){
 	word_struct *word_tmp = word;
-	for(int i = 0; i < cnt; i++){
+	int i;
+	for(i = 0; i < cnt; i++){
 		word_array[i] = word_tmp;
 		word_tmp = word_tmp -> next;
 	}

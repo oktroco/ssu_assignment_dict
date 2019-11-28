@@ -1,7 +1,8 @@
 void print_hangman(char* underbar, char* hanged_man, word_struct* word){        //행맨의 화면을 출력하는 함수
         printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
         printf("(힌트) : %s\n\n\n", word -> kor);
-        for(int tmp = 0; tmp < 20; tmp++) //바꿈
+		int tmp;
+        for(tmp = 0; tmp < 20; tmp++) //바꿈
                 putchar('-');
         printf("+\n");
         printf("%20c\n", hanged_man[0]);
@@ -61,8 +62,8 @@ void hang_man(void){		//행맨
                 printf("\n%hhd번째 시도 : ", tries++);
                 scanf("%c", &tmp);
                 while(getchar() != '\n');       //입력버퍼 비우기
-
-                for(int i  = 0; i < strlen(link -> eng); i++)   //받아온 단어를 비교
+				int i;
+                for(i  = 0; i < strlen(link -> eng); i++)   //받아온 단어를 비교
                         if((link -> eng)[i] == tmp){
                                win += 1;                //진행도를 증가시킴
                                progress[i] = tmp;
