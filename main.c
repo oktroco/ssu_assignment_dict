@@ -1,6 +1,7 @@
 #include "header.h"
 #include "manage.c"
 #include "hangman.c"
+#include "flasch.c"
 int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
 
 int main(void){
@@ -19,7 +20,7 @@ int main(void){
 		else if (num == 3)
 			hang_man();	//행맨
 		else if (num == 2)
-			;	//플래시카드
+			flasch();	//플래시카드
 		else if (num == 1)
 			;	//단어맞추기
 		else if (num == 5)
