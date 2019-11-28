@@ -53,7 +53,8 @@ void choose_dic(word_struct *word){
 */
 void make_word_array(word_struct **word_array, word_struct *word){
 	word_struct *word_tmp = word;
-	for(int i = 0; i < cnt; i++){
+	int i;
+	for(i = 0; i < cnt; i++){
 		word_array[i] = word_tmp;
 		word_tmp = word_tmp -> next;
 	}
