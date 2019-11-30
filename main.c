@@ -13,13 +13,12 @@ int main(void){
 		while(getchar() != '\n'); //입력버퍼 비우기
 
 		if (num == 4)
-			manage_init();	//단어장관리
+			manage_init();
 		else if (num == 3)
 			hang_man();	//행맨
-		else if (num == 2)
-			flasch();	//플래시카드
+		else if (num == 2);
 		else if (num == 1)
-			match_eng();	//단어맞추기
+			match_eng();
 		else if (num == 5)
 			;  //종료
 		else
