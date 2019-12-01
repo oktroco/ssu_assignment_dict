@@ -4,7 +4,8 @@
 void print_hangman(char *underbar, char* hanged_man, word_struct* word){        //행맨의 화면을 출력하는 함수
         printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
         printf("(힌트) : %s\n\n\n", word -> kor);
-        for(char tmp = 0; tmp < 20; tmp++)
+		char tmp;
+        for(tmp = 0; tmp < 20; tmp++)
                 putchar('-');
         printf("+\n");
         printf("%20c\n", hanged_man[0]);
