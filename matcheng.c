@@ -1,11 +1,11 @@
 void match_eng(void){
 	char dic_num, ans_word[15];
 	int method;
-	extern int cnt;
+	int cnt;
 	word_struct *wordfile = (word_struct *)malloc(sizeof(word_struct));
+	cnt = choose_dic(wordfile);
 	word_struct *word_array[cnt];
-	choose_dic(wordfile);
-	make_word_array(word_array, wordfile);
+	make_word_array(word_array, wordfile, cnt);
 	printf("출력 방식(알파벳 순서대로: 1,무작위: 2): ");
 	scanf("%d", &method);
 	system("clear");

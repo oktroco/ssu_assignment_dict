@@ -37,7 +37,7 @@ void man_status(char lose, char* hanged_man){           //매달려있는 행맨
         }
 }
 
-word_struct* mklink(word_struct* head){		//행맨에 사용할 구조체를 가져옴
+word_struct* mklink(word_struct* head, int cnt){		//행맨에 사용할 구조체를 가져옴
         int random_hang = rand() % cnt;     //난수 생성
 	srand(time(NULL));
         word_struct *link = head;       //사용할 구조체 가져오기
@@ -66,10 +66,10 @@ void hang_man(void){		//행맨
         char tmp, win = 0, lose = 0, tries = 1;
         char progress[16], hanged_man[6] = {' ', ' ', ' ', ' ', ' ', ' '};      //progress는 행맨 밑 언더바에, hanged_man은 행맨을 그리는데 사용
         _Bool correct = 0, game_end = 1;      //단어를 맞췄는지 확인하는데 사용
-
+	int cnt;
 	word_struct *head = (word_struct*)malloc(sizeof(word_struct));		//단어를 받아올 구조체 선언
-        choose_dic(head); //연결리스트 불러옴
-	word_struct *link = mklink(head);
+   cnt = choose_dic(head); //연결리스트 불러옴
+	word_struct *link = mklink(head, cnt);
 
 	for(tmp = 0; tmp < strlen(link->eng); tmp++)            //단어가 나올 언더바 초기화
 		progress[tmp] = '_';
