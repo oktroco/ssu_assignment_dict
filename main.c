@@ -1,6 +1,4 @@
 #include "header.h"
-int cnt = 0; //현재 다루는 자기 참조 구조체의 구조체갯수(전역변수)
-
 int main(void){
 	char num = 0;
 	while(num != 5){
@@ -38,18 +36,20 @@ int compare_word(const void *a, const void *b){
 어느 함수에서든 호출 가능
 자기참조구조체를 통해 만든 구조체배열의 주소를 get
 */
-void choose_dic(word_struct *word){
+int choose_dic(word_struct *word){
+	int cnt = 0;
 	FILE *dict;
 	while((dict = read_file("r")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
 	cnt = make_struct(dict, word); //dict와 word를 이용하여 자기 참조 구조체 완성
 	fclose(dict);
+	return cnt;
 }
 
 /*
 자기참조구조체를 다루기 쉽게
 포인터배열에 자기참조구조체들의 주소값들을 저장하는 작업
 */
-void make_word_array(word_struct **word_array, word_struct *word){
+void make_word_array(word_struct **word_array, word_struct *word, int cnt){
 	word_struct *word_tmp = word;
 	int i;
 	for(i = 0; i < cnt; i++){
@@ -63,18 +63,18 @@ dic에서 자기 참조 구조체를 생성하는 함수
 자기 참조 구조체의 구조체 갯수를 반환
 */
 int make_struct(FILE *dict, word_struct *word){
-	int cnt_tmp = 0; //자기 참조 구조체의 구조체갯수
+	int cnt = 0; //자기 참조 구조체의 구조체갯수
 	word_struct *tmp_word, *p_word = word; //임시 포인터변수p_word에 word의 주소대입
 	//파일이 끝날 때까지 while 순환
 	while(fscanf(dict, "%s %[^\n]", p_word -> eng, p_word -> kor) != EOF){	//영어단어 저장
 		//getc(dict);
-		cnt_tmp++;
+		cnt++;
 		p_word -> next = (word_struct *)malloc(sizeof(word_struct)); //p_word의 next에 다음 구조체의 주소를 동적할당
 		tmp_word = p_word; //임시 변수에 p_word 임시보관(마지막의 next에 NULL을 넣기 위함)
 		p_word = p_word -> next; //다음 구조체에 정보입력을 하기 위해 p_word에 다음 구조체 주소 대입
 	}
 	tmp_word -> next = NULL; //마지막 구조체에는 이어지는 구조체가 없으므로 next에 NULL포인터 대입
-	return cnt_tmp;
+	return cnt;
 }
 
 //x.dic이 dic.list이 존재하는지 검사 후 x.dic의 주소를 반환을 하는 함수
