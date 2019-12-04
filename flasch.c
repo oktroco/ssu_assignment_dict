@@ -15,13 +15,13 @@ void flasch(void){
 	if(how==1){
 		qsort(word_arry, cnt, sizeof(word_struct*), compare_word);
 		for(i=0; i<cnt; i++){
-			printf("%s",word_arry[i]->eng);
+			printf("%s\0",word_arry[i]->eng);
 			sleep(time);
-			printf("%s",word_arry[i]->kor);
+			printf("%s\i",word_arry[i]->kor);
 			sleep(time);
 		}
 	}
-	else{
+	else if(how==2){
 		for(i=0; i<cnt; i++){
 			num[i]=rand()%cnt;
 		}
@@ -35,9 +35,9 @@ void flasch(void){
 			}
 		}
 		for(i=0;i<cnt;i++){
-			printf("%s", word_arry[num[i]]->eng);
+			printf("%s\0", word_arry[num[i]]->eng);
 			sleep(time);
-			printf("%s", word_arry[num[i]]->kor);
+			printf("%s\0", word_arry[num[i]]->kor);
 			sleep(time);
 		}
 	}
