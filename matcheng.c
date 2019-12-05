@@ -9,10 +9,6 @@ void match_eng(void){ //오현승
 	printf("출력 방식(알파벳 순서대로: 1,무작위: 2): ");
 	scanf("%d", &method); //출력 방식 결정
 	system("clear");
-	for(int i=0;i<30;i++){
-	    printf("%s -> ",word_array[i]->eng);
-	    printf("%s\n",word_array[i]->kor);
-	}
 	printf(">>영어 단어 암기 프로그램 : 영어 단어 맞추기<<\n");
 	if(method==1){ //알파벳 순서대로
 		int cor = 0; //맞은 개수
@@ -24,7 +20,7 @@ void match_eng(void){ //오현승
 			if(strcmp(ans_word, word_array[k]->eng) == 0)
 				printf("correct!\n"), cor++; //맞은 개수++
 			else if(strcmp(ans_word, ".quit")==0){ //강제 종료
-			    while(getchar()!='\n'); //이거 정상 작동되는 이유 알려주세요...
+			    while(getchar()!='\n');
 			    break;
 			}else
 				printf("incorrect!\n");
@@ -42,10 +38,7 @@ void match_eng(void){ //오현승
 				    k--; //중복일 경우 다시 돌아가서 숫자 생성
 				}
 			}
-		}for(int i=0;i<30;i++){
-		    printf("%d\n",a[i]);
-		}
-		for(k=0;k<cnt;k++){
+		}for(k=0;k<cnt;k++){
 			m=a[k]; //랜덤 숫자를 m에 저장
 			printf("%s -> ",word_array[m]->kor); //m번째 단어 출력
 			scanf("%s",ans_word); //답 입력
