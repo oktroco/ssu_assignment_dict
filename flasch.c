@@ -25,7 +25,7 @@ void flasch(void){
 			num[i]=rand()%cnt;
 		}
 		for(i=0; i<cnt; i++){
-			for(j=0;j<i;i++){
+			for(j=0;j<i;j++){
 				while(num[i]==num[j]){
 					num[i]=rand()%cnt;
 					if(num[i]!=num[j])
