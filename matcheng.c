@@ -28,10 +28,10 @@ void match_eng(void){ //오현승
 		}
 		printf("당신의 점수는 %.2f 점입니다.", (float)cor/((float)k)*100); //점수 출력
 	}else if(method==2){ //무작위
-		int k,m,cor=0,random,a[30]; //맞은 개수,랜덤 숫자,랜덤 숫자 배열 변수
+		int k,m,cor=0,random,a[cnt]; //맞은 개수,랜덤 숫자,랜덤 숫자 배열 변수
 		srand(time(NULL)); //무작위
 		for(k=0;k<cnt;k++){
-			random=rand()%30; //무작위 숫자 생성
+			random=rand()%cnt; //무작위 숫자 생성
 			a[k]=random;
 			for(m=0;m<k;m++){ //중복 검사
 				if(a[m]==random){

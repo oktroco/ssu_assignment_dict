@@ -4,9 +4,9 @@
 #define WIN 1
 
 void print_hangman(char *underbar, char* hanged_man, word_struct* word){        //행맨의 화면을 출력하는 함수
-        printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
+        char tmp;
+	printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
         printf("(힌트) : %s\n\n\n", word -> kor);
-		char tmp;
         for(tmp = 0; tmp < 20; tmp++)
                 putchar('-');
         printf("+\n");
@@ -51,7 +51,7 @@ word_struct* mklink(word_struct* head, int cnt){		//행맨에 사용할 구조�
 void gameoff(_Bool w_or_l, char* progress, char* hanged_man, word_struct *link){	//승리와 패배 후의 작업
 	system("clear");
         if(w_or_l == LOSE){          //패배할 경우
-                man_status(6, hanged_man);
+m	an_status(6, hanged_man);
                 print_hangman(progress, hanged_man, link);
                 printf("\n\nGAMEOVER");
         }
