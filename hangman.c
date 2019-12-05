@@ -1,3 +1,5 @@
+//이하 함수 박동진
+
 #define LOSE 0
 #define WIN 1
 

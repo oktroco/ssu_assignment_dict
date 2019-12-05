@@ -100,7 +100,7 @@ FILE *read_file(char *type){
 }
 
 //연결리스트의 동적할당을 해제하는 함수
-void freeall(word_struct *curr){
+void freeall(word_struct *curr){	//박동진
 	if(curr -> next != NULL)
 		freeall(curr -> next);
 	free(curr);
