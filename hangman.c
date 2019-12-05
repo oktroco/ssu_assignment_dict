@@ -51,13 +51,17 @@ word_struct* mklink(word_struct* head, int cnt){		//행맨에 사용할 구조�
 void gameoff(_Bool w_or_l, char* progress, char* hanged_man, word_struct *link){	//승리와 패배 후의 작업
 	system("clear");
         if(w_or_l == LOSE){          //패배할 경우
-m	an_status(6, hanged_man);
+	man_status(6, hanged_man);
                 print_hangman(progress, hanged_man, link);
-                printf("\n\nGAMEOVER");
+                printf("\n\n######################");
+                printf("\n###    GAMEOVER    ###");
+                printf("\n######################");
         }
         else{                   //승리했을 경우
                 print_hangman(progress, hanged_man, link);
-                printf("\n\nCONGRATULATION!!");
+		printf("\n\n######################");
+                printf("\n###CONGRATULATION!!###");
+		printf("\n######################");
         }
         printf("\n엔터를 누르면 메인 메뉴로 돌아갑니다.");
         while(getchar() != '\n');       //'\n'이 나올때까지 무한반복
