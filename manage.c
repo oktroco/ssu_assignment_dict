@@ -1,3 +1,4 @@
+//오경택
 //단어장 관리 메뉴 시작
 void manage_init(void){
 	system("clear");
@@ -26,6 +27,7 @@ void manage_init(void){
 	}
 }
 
+//오경택
 //새 파일 추가
 void manage_add_dic(void){
 	FILE *f = fopen("dic.list", "r"); //dic.list 열기
@@ -55,6 +57,7 @@ void manage_add_dic(void){
 	system("clear");
 }
 
+//오경택
 //새 단어 추가
 void manage_add_words(void){
 	FILE *dict;
@@ -69,6 +72,7 @@ void manage_add_words(void){
 	system("clear");
 }
 	
+//오경택
 //단어 입력 함수
 void input_words(FILE *f){
 	char word[109]; //공백, NULL문자를 포함하여 105 + 4개의 공간 할당
@@ -86,6 +90,7 @@ void input_words(FILE *f){
 	}
 }
 
+//오경택
 //단어장 보기
 void view_file_words(void){
 	FILE *dict;
@@ -100,6 +105,7 @@ void view_file_words(void){
 	system("clear");
 }
 
+//오경택
 //단어 파일 목록보기
 void view_dic_list(void){
 	FILE *dic_list = fopen("dic.list", "r"); 

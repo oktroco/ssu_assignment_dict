@@ -49,4 +49,5 @@ void flash(void){
 			system("clear");//화면정리
 		}
 	}
+	freeall(word);
 }
