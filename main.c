@@ -1,5 +1,8 @@
 #include "header.h"
-int main(void){
+
+//박동진
+//메뉴 UI가 출력되는 main
+int main(void){ 
 	char num = 0;
 	while(num != 5){
 		system("clear");
@@ -7,6 +10,7 @@ int main(void){
 		fprintf(stderr, "1. 영어 단어 맞추기\t2. 플래쉬 카드\n");
 		fprintf(stderr, "3. 행맨(hangman)\t4. 단어장 관리\n");
 		fprintf(stderr, "5. 프로그램 종료\n");
+		printf("\n\n번호를 입력하세요 : ");
 		scanf("%hhd", &num);
 		while(getchar() != '\n'); //입력버퍼 비우기
 
@@ -27,28 +31,27 @@ int main(void){
 
 }
 
+//오경택
 //qsort를 위한 compare함수
 int compare_word(const void *a, const void *b){
 	return strcmp((*(word_struct **)a) -> eng, (*(word_struct **)b) -> eng);
 }
 
-/*
-어느 함수에서든 호출 가능
-자기참조구조체를 통해 만든 구조체배열의 주소를 get
-*/
+//오경택
+//어느 함수에서든 호출 가능
+//파일 선택 후, 자기참조구조체를 생성하고 구조체의 크기를 반환
 int choose_dic(word_struct *word){
 	int cnt = 0;
 	FILE *dict;
 	while((dict = read_file("r")) == NULL); //dict에 x.dic 파일 저장(읽을 때까지 반복)
 	cnt = make_struct(dict, word); //dict와 word를 이용하여 자기 참조 구조체 완성
 	fclose(dict);
-	return cnt;
+	return cnt; //자기참조구조체의 전체크기반환
 }
 
-/*
-자기참조구조체를 다루기 쉽게
-포인터배열에 자기참조구조체들의 주소값들을 저장하는 작업
-*/
+//오경택
+//자기참조구조체를 다루기 쉽게
+//포인터배열에 자기참조구조체들의 주소값들을 저장하는 작업
 void make_word_array(word_struct **word_array, word_struct *word, int cnt){
 	word_struct *word_tmp = word;
 	int i;
@@ -56,12 +59,13 @@ void make_word_array(word_struct **word_array, word_struct *word, int cnt){
 		word_array[i] = word_tmp;
 		word_tmp = word_tmp -> next;
 	}
+	freeall(word); //자기참조구조체 메모리해제
 }
 
-/*
-dic에서 자기 참조 구조체를 생성하는 함수
-자기 참조 구조체의 구조체 갯수를 반환
-*/
+
+//오경택
+//dic에서 자기 참조 구조체를 생성하는 함수
+//자기 참조 구조체의 구조체 갯수를 반환
 int make_struct(FILE *dict, word_struct *word){
 	int cnt = 0; //자기 참조 구조체의 구조체갯수
 	word_struct *tmp_word, *p_word = word; //임시 포인터변수p_word에 word의 주소대입
@@ -77,6 +81,7 @@ int make_struct(FILE *dict, word_struct *word){
 	return cnt;
 }
 
+//오경택
 //x.dic이 dic.list이 존재하는지 검사 후 x.dic의 주소를 반환을 하는 함수
 FILE *read_file(char *type){
 	char target[10]; //사용자가 원하는 파일명문자열
@@ -99,8 +104,9 @@ FILE *read_file(char *type){
 	return NULL;
 }
 
+//박동진
 //연결리스트의 동적할당을 해제하는 함수
-void freeall(word_struct *curr){	//박동진
+void freeall(word_struct *curr){
 	if(curr -> next != NULL)
 		freeall(curr -> next);
 	free(curr);

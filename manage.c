@@ -105,8 +105,8 @@ void view_dic_list(void){
 	FILE *dic_list = fopen("dic.list", "r"); 
 	char tmp_dic[20];
 	printf("-------단어장목록-------\n");
+	short dic_cnt = 0; //출력 갯수(5개가 되면 개행)
 	while(fscanf(dic_list, "%[^\n]\n", tmp_dic) != EOF){
-		static short dic_cnt = 0; //출력 갯수(5개가 되면 개행)
 		if(dic_cnt < 5){ //한 줄에 5개를 출력한 경우
 			printf("%9s", tmp_dic);
 			dic_cnt++;
