@@ -23,7 +23,7 @@ int main(void){
 		else if (num == 1)
 			match_eng();
 		else if (num == 5)
-			;  //종료
+			system("clear");  //종료
 		else
 			fprintf(stderr, "잘못된 입력\n");	//1~5 사이의 입력이 아닐때 오류메세지 출력
 		putchar('\n');
