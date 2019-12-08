@@ -29,5 +29,5 @@
 	#include "manage.c"
 	#include "hangman.c"
 	#include "matcheng.c"
-	#include "flasch.c"
+	#include "flash.c"
 #endif
