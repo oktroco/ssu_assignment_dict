@@ -16,9 +16,11 @@ void flash(void){
 		system("clear");
 		qsort(word_arry, cnt, sizeof(word_struct*), compare_word);//단어 정렬
 		for(i=0; i<cnt; i++){
+			printf(">>영어 단어 암기 프로그램 : 영어 단어 맞추기<<\n");
 			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n",word_arry[i]->eng);//영어 단어장 출력
 			sleep(time);//time 만큼 출력 시간 지정
 			system("clear");//화면정리
+			printf(">>영어 단어 암기 프로그램 : 영어 단어 맞추기<<\n");
 			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n",word_arry[i]->kor);//한글 단어장 출력
 			sleep(time);//time 만큰 출력 시간 지정
 			system("clear");//화면정리
