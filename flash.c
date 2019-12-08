@@ -13,15 +13,19 @@ void flash(void){
 	printf("출력방식(알파벳 순서대로 : 1, 무작위 : 2)");
 	scanf("%d", &how);//출력방식 입력
 	if(how==1){
+		system("clear");
 		qsort(word_arry, cnt, sizeof(word_struct*), compare_word);//단어 정렬
 		for(i=0; i<cnt; i++){
-			printf("%s\n",word_arry[i]->eng);
+			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n",word_arry[i]->eng);//영어 단어장 출력
 			sleep(time);//time 만큼 출력 시간 지정
-			printf("%s\n",word_arry[i]->kor);
+			system("clear");//화면정리
+			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n",word_arry[i]->kor);//한글 단어장 출력
 			sleep(time);//time 만큰 출력 시간 지정
+			system("clear");//화면정리
 		}
 	}
 	else if(how==2){
+		system("clear");
 		for(i=0; i<cnt; i++){
 			num[i]=rand()%cnt;//랜덤 출력 번호 저장
 		}
@@ -35,10 +39,12 @@ void flash(void){
 			}
 		}
 		for(i=0;i<cnt;i++){
-			printf("%s\n", word_arry[num[i]]->eng);//영어 단어 출력
+			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n", word_arry[num[i]]->eng);//영어 단어 출력
 			sleep(time);//잠시 멈춤 딜레이
-			printf("%s\n", word_arry[num[i]]->kor);//한글 단어 출력
+			system("clear");//화면 정리
+			printf("\n \n \n \n \n \n \n \t \t \t \t%s\n", word_arry[num[i]]->kor);//한글 단어 출력
 			sleep(time);//잠시 멈춤 딜레이
+			system("clear");//화면정리
 		}
 	}
 }
