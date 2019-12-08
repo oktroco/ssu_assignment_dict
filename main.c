@@ -59,7 +59,7 @@ void make_word_array(word_struct **word_array, word_struct *word, int cnt){
 		word_array[i] = word_tmp;
 		word_tmp = word_tmp -> next;
 	}
-	freeall(word); //자기참조구조체 메모리해제
+	//freeall(word); //자기참조구조체 메모리해제
 }
 
 

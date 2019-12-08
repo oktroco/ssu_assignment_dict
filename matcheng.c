@@ -66,5 +66,6 @@ void match_eng(void){
 	}else
 		printf("출력방식을 잘못 선택하셨습니다\n");
 	while(getchar()!='\n');
+	freeall(wordfile);
 	system("clear");
 }
