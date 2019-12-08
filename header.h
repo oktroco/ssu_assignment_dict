@@ -24,7 +24,7 @@
 	void view_file_words(void); //오경택
 	void view_dic_list(void); //오경택
 	void freeall(word_struct*); //박동진
-	void flasch(void); 
+	void flash(void); 
 	void match_eng(void); //오현승
 	#include "manage.c" //오경택
 	#include "hangman.c" //박동진
