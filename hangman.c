@@ -1,8 +1,8 @@
-//이하 함수 박동진
 
 #define LOSE 0
 #define WIN 1
 
+//박동진
 void print_hangman(char *underbar, char* hanged_man, word_struct* word){        //행맨의 화면을 출력하는 함수
         char tmp;
 	printf(">>영어 단어 암기 프로그램 : 행맨<<\n");
@@ -17,6 +17,7 @@ void print_hangman(char *underbar, char* hanged_man, word_struct* word){        
 }
 
 
+//박동진
 void man_status(char lose, char* hanged_man){           //매달려있는 행맨의 진행도를 저장하는 함수
         switch(lose){
                 case 6 :
@@ -39,6 +40,7 @@ void man_status(char lose, char* hanged_man){           //매달려있는 행맨
         }
 }
 
+//박동진
 word_struct* mklink(word_struct* head, int cnt){		//행맨에 사용할 구조체를 가져옴
         int random_hang = rand() % cnt;     //난수 생성
 	srand(time(NULL));
@@ -48,6 +50,7 @@ word_struct* mklink(word_struct* head, int cnt){		//행맨에 사용할 구조�
 	return link;
 }
 
+//박동진
 void gameoff(_Bool w_or_l, char* progress, char* hanged_man, word_struct *link){	//승리와 패배 후의 작업
 	system("clear");
         if(w_or_l == LOSE){          //패배할 경우
@@ -68,6 +71,7 @@ void gameoff(_Bool w_or_l, char* progress, char* hanged_man, word_struct *link){
 	system("clear");
 }
 
+//박동진
 void hang_man(void){		//행맨
         char tmp, win = 0, lose = 0, tries = 1;
         char progress[16], hanged_man[6] = {' ', ' ', ' ', ' ', ' ', ' '};      //progress는 행맨 밑 언더바에, hanged_man은 행맨을 그리는데 사용
